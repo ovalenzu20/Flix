@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import WebKit
 
 enum MovieKeys{
     static let title = "title"
@@ -22,6 +23,7 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var releaseDateLabel: UILabel!
     @IBOutlet weak var overviewLabel: UILabel!
     
+   
     var movie : [String: Any]?
     
     override func viewDidLoad() {
@@ -38,26 +40,32 @@ class DetailViewController: UIViewController {
             backDropImageView.af_setImage(withURL: backdropURL)
             let posterPathURL = URL(string: baseURLString + posterPathString)!
             posterImageView.af_setImage(withURL: posterPathURL)
-
-            
-            
         }
     }
 
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let trailerVC = segue.destination as! TrailerViewController
+        let webConfiguration = WKWebViewConfiguration()
+        webConfiguration.allowsInlineMediaPlayback = true
+        
+        trailerVC.trailerView = WKWebView(frame: self.view.frame, configuration: webConfiguration)
+        
+        let myURL = URL(string: "https://www.youtube.com/embed/BY-aB72nONA?playsinline=1")!
+        let youtubeRequest = URLRequest(url: myURL)
+        trailerVC.trailerView.load(youtubeRequest)
+        
+    }
+    
+//    @IBAction func didTapPoster(_ sender: Any) {
+//        let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
+//        let userVC = mainStoryboard.instantiateViewController(withIdentifier: "TrailerViewController") as! TrailerViewController
+//        performSegue(withIdentifier: "tappedPosterView", sender: nil)
+//        
+//    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
