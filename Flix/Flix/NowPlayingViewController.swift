@@ -11,6 +11,7 @@ import AlamofireImage
 
 class NowPlayingViewController: UIViewController, UITableViewDataSource{
 
+    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
     var movies : [[String : Any]] = []
     @IBOutlet weak var tableView: UITableView!
     var refreshControl : UIRefreshControl!
@@ -46,7 +47,10 @@ class NowPlayingViewController: UIViewController, UITableViewDataSource{
         refreshControl.addTarget(self, action: #selector (NowPlayingViewController.didPullToRefresh(_:)), for: .valueChanged)
         tableView.insertSubview(refreshControl, at: 0)
         
+        
         fetchMovies()
+        
+        
         
     }
     
@@ -55,12 +59,23 @@ class NowPlayingViewController: UIViewController, UITableViewDataSource{
     }
 
     func fetchMovies(){
+        activityIndicatorView.startAnimating()
+
         let url = URL(string: "https://api.themoviedb.org/3/movie/now_playing?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed")!
         let request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 10)
         let session = URLSession(configuration: .default, delegate: nil, delegateQueue: OperationQueue.main)
         
         let task = session.dataTask(with: request) { (data, response, error) in
             if let error = error{
+                
+                let alertController = UIAlertController(title: "Cannot get movies", message: "The internet connection appears to be off", preferredStyle: .alert)
+                let tryAgain = UIAlertAction(title: "Try Again", style: .default) { (action) in
+                    self.fetchMovies()
+                }
+                alertController.addAction(tryAgain)
+                self.present(alertController, animated: true)
+                
+                
                 print(error.localizedDescription)
             } else if let data = data {
                 let dataDictionary = try! JSONSerialization.jsonObject(with: data, options: []) as! [String : Any]
@@ -71,6 +86,8 @@ class NowPlayingViewController: UIViewController, UITableViewDataSource{
             }
         }
         task.resume()
+        activityIndicatorView.stopAnimating()
+
     }
     
     override func didReceiveMemoryWarning() {
