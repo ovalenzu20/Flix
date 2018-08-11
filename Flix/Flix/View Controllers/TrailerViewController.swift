@@ -12,21 +12,20 @@ import WebKit
 class TrailerViewController: UIViewController, WKUIDelegate {
 
     @IBOutlet weak var trailerView: WKWebView!
+    var movie : [String : Any]?
     
-//    override func loadView() {
-//        let webConfig = WKWebViewConfiguration()
-//        webConfig.allowsInlineMediaPlayback = true
-//        trailerView = WKWebView(frame: .zero, configuration: webConfig)
-//        
-//        view = trailerView
-//        
-//        
-//    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         trailerView.uiDelegate = self
-        let myURL = URL(string: "https://www.youtube.com/watch?v=dQw4w9WgXcQ")!
+        
+        if let movie = movie {
+            let movieID = movie["id"] as? String
+        }
+        
+        let baseURL = "https://www.youtube.com/watch?v="
+        
+        let myURL = URL(string: "dQw4w9WgXcQ")!
         let youtubeRequest = URLRequest(url: myURL)
         trailerView.load(youtubeRequest)
     }
@@ -40,6 +39,36 @@ class TrailerViewController: UIViewController, WKUIDelegate {
         dismiss(animated: true, completion: nil)
     }
     
+    func fetchVideos(){
+        let url = URL(string: "https://api.themoviedb.org/3/movie/{movie_id}/videos?api_key=api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed")!
+        let request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: 10)
+        let session = URLSession(configuration: .default, delegate: nil, delegateQueue: OperationQueue.main)
+        
+        let task = session.dataTask(with: request) { (data, response, error) in
+            if let error = error{
+                
+                let alertController = UIAlertController(title: "Cannot get video", message: "The internet connection appears to be off", preferredStyle: .alert)
+                let tryAgain = UIAlertAction(title: "Try Again", style: .default) { (action) in
+                    self.fetchVideos()
+                }
+                
+                alertController.addAction(tryAgain)
+                self.present(alertController, animated: true)
+                
+                
+                print(error.localizedDescription)
+            } else if let data = data {
+                let dataDictionary = try! JSONSerialization.jsonObject(with: data, options: []) as! [String : Any]
+                let movies = dataDictionary["results"] as! [[String : Any]]
+                self.movies = movies
+                self.tableView.reloadData()
+                self.refreshControl.endRefreshing()
+            }
+        }
+        task.resume()
+        activityIndicatorView.stopAnimating()
+        
+    }
     
 
 }
