@@ -45,14 +45,7 @@ class DetailViewController: UIViewController {
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let trailerVC = segue.destination as! TrailerViewController
-        let webConfiguration = WKWebViewConfiguration()
-        webConfiguration.allowsInlineMediaPlayback = true
         
-        trailerVC.trailerView = WKWebView(frame: self.view.frame, configuration: webConfiguration)
-        
-        let myURL = URL(string: "https://www.youtube.com/embed/BY-aB72nONA?playsinline=1")!
-        let youtubeRequest = URLRequest(url: myURL)
-        trailerVC.trailerView.load(youtubeRequest)
         
     }
     

@@ -9,13 +9,26 @@
 import UIKit
 import WebKit
 
-class TrailerViewController: UIViewController {
+class TrailerViewController: UIViewController, WKUIDelegate {
 
     @IBOutlet weak var trailerView: WKWebView!
+    
+//    override func loadView() {
+//        let webConfig = WKWebViewConfiguration()
+//        webConfig.allowsInlineMediaPlayback = true
+//        trailerView = WKWebView(frame: .zero, configuration: webConfig)
+//        
+//        view = trailerView
+//        
+//        
+//    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        trailerView.uiDelegate = self
+        let myURL = URL(string: "https://www.youtube.com/watch?v=dQw4w9WgXcQ")!
+        let youtubeRequest = URLRequest(url: myURL)
+        trailerView.load(youtubeRequest)
     }
 
     override func didReceiveMemoryWarning() {

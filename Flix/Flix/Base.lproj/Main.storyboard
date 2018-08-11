@@ -142,7 +142,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="3233" y="456"/>
+            <point key="canvasLocation" x="3034" y="456"/>
         </scene>
         <!--Now Playing-->
         <scene sceneID="bG1-zd-CZp">
@@ -169,6 +169,7 @@
                 <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="S6F-YF-rhp" sceneMemberID="viewController">
                     <toolbarItems/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="2BK-2x-0Uh">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>
