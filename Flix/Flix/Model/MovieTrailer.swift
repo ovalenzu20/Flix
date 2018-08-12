@@ -39,9 +39,7 @@ class MovieTrailer{
                     
                     if videoType == "Trailer"{
                         let videoKey = video["key"] as! String
-                        self.YouTubeKey = videoKey
-                        print(self.YouTubeKey)
-                        
+                        self.YouTubeKey = videoKey                        
                     }
                 }
             }
