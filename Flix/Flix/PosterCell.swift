@@ -7,8 +7,7 @@
 //
 
 import UIKit
-
+import AlamofireImage
 class PosterCell: UICollectionViewCell {
-    
     @IBOutlet weak var posterImageView: UIImageView!
 }

@@ -12,17 +12,13 @@ import WebKit
 class TrailerViewController: UIViewController, WKUIDelegate {
 
     @IBOutlet weak var trailerView: WKWebView!
-    var movie : [String : Any]?
+    var movie : Movie?
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         trailerView.uiDelegate = self
-        
-        if let movie = movie {
-            let movieID = movie["id"] as? String
-        }
-        
         let baseURL = "https://www.youtube.com/watch?v="
         
         let myURL = URL(string: "dQw4w9WgXcQ")!
@@ -60,13 +56,10 @@ class TrailerViewController: UIViewController, WKUIDelegate {
             } else if let data = data {
                 let dataDictionary = try! JSONSerialization.jsonObject(with: data, options: []) as! [String : Any]
                 let movies = dataDictionary["results"] as! [[String : Any]]
-                self.movies = movies
-                self.tableView.reloadData()
-                self.refreshControl.endRefreshing()
+                
             }
         }
         task.resume()
-        activityIndicatorView.stopAnimating()
         
     }
     

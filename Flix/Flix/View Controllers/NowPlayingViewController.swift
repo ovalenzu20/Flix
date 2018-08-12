@@ -12,7 +12,7 @@ import AlamofireImage
 class NowPlayingViewController: UIViewController, UITableViewDataSource{
 
     @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
-    var movies : [[String : Any]] = []
+    var movies: [Movie] = []
     @IBOutlet weak var tableView: UITableView!
     var refreshControl : UIRefreshControl!
     
@@ -21,20 +21,12 @@ class NowPlayingViewController: UIViewController, UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell", for: indexPath) as! MovieCell
-        let movie = movies[indexPath.row]
-        let title = movie["title"] as! String
-        let overview = movie["overview"] as! String
+        let movieCell = tableView.dequeueReusableCell(withIdentifier: "MovieCell", for: indexPath) as! MovieCell
+        let movie = self.movies[indexPath.row]
+        movieCell.movie = movie
+        movieCell.setupViews()
         
-        let posterPath = movie["poster_path"] as! String
-        let baseURL = "https://image.tmdb.org/t/p/w500"
-        let posterURL = URL(string: baseURL + posterPath)!
-
-        cell.titleLabel.text! = title
-        cell.overviewLabel.text! = overview
-        cell.posterImage.af_setImage(withURL: posterURL)
-        
-        return cell
+        return movieCell
     }
     
     override func viewDidLoad() {
@@ -58,7 +50,6 @@ class NowPlayingViewController: UIViewController, UITableViewDataSource{
             let movie = movies[indexPath.row]
             let detailViewController = segue.destination as! DetailViewController
             detailViewController.movie = movie
-            
         }
         
         
@@ -88,9 +79,10 @@ class NowPlayingViewController: UIViewController, UITableViewDataSource{
                 
                 print(error.localizedDescription)
             } else if let data = data {
-                let dataDictionary = try! JSONSerialization.jsonObject(with: data, options: []) as! [String : Any]
-                let movies = dataDictionary["results"] as! [[String : Any]]
-                self.movies = movies
+                let dataDictionary = try! JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
+                let movieDictionaries = dataDictionary["results"] as! [[String: Any]]
+                self.movies = Movie.movies(dictionaries: movieDictionaries)
+                
                 self.tableView.reloadData()
                 self.refreshControl.endRefreshing()
             }
