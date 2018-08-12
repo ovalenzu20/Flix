@@ -43,7 +43,7 @@ class NowPlayingViewController: UIViewController, UITableViewDataSource{
         fetchMovies()
         
     }
-    
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let cell = sender as! UITableViewCell
         if let indexPath = tableView.indexPath(for: cell){

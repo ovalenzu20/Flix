@@ -13,16 +13,13 @@ class TrailerViewController: UIViewController, WKUIDelegate {
 
     @IBOutlet weak var trailerView: WKWebView!
     var movie : Movie?
-    
+    var YouTubeURL : URL?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         trailerView.uiDelegate = self
-        let baseURL = "https://www.youtube.com/watch?v="
-        
-        let myURL = URL(string: "dQw4w9WgXcQ")!
-        let youtubeRequest = URLRequest(url: myURL)
+        let youtubeRequest = URLRequest(url: YouTubeURL!)
         trailerView.load(youtubeRequest)
     }
 

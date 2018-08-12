@@ -12,7 +12,7 @@ class Movie {
     var title: String
     var releaseDate : String
     var overview : String
-    var id : String
+    var id : Int
     var posterURL : URL!
     var backdropURL : URL!
     
@@ -24,7 +24,7 @@ class Movie {
         title = dictionary["title"] as? String ?? "No title"
         releaseDate = dictionary["release_date"] as? String ?? "No release date"
         overview = dictionary["overview"] as? String ?? "No overview"
-        id = dictionary["id"] as? String ?? "No ID"
+        id = dictionary["id"] as? Int ?? -1
         
         let posterURLString = dictionary["poster_path"] as! String
         posterURL = URL(string: baseURL + posterURLString)!

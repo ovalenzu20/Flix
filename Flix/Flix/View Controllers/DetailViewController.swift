@@ -19,9 +19,11 @@ class DetailViewController: UIViewController {
     
    
     var movie : Movie?
+    var movieTrailer : MovieTrailer?
     
     func setupViews(){
         if let movie = movie{
+            movieTrailer = MovieTrailer(movieID: movie.id)
             backDropImageView.af_setImage(withURL: movie.backdropURL!)
             posterImageView.af_setImage(withURL: movie.posterURL!)
             titleLabel.text! = movie.title
@@ -33,21 +35,19 @@ class DetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
+        movieTrailer = MovieTrailer(movieID: movie!.id)
+        movieTrailer?.fetchMovieTrailers()
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let trailerVC = segue.destination as! TrailerViewController
+        let baseYouTubeString = "https://www.youtube.com/watch?v="
+        
+        trailerVC.YouTubeURL = URL(string: baseYouTubeString + (movieTrailer?.YouTubeKey)!)!
         
         
     }
-    
-//    @IBAction func didTapPoster(_ sender: Any) {
-//        let mainStoryboard = UIStoryboard(name: "Main", bundle: nil)
-//        let userVC = mainStoryboard.instantiateViewController(withIdentifier: "TrailerViewController") as! TrailerViewController
-//        performSegue(withIdentifier: "tappedPosterView", sender: nil)
-//        
-//    }
-    
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
