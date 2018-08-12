@@ -12,16 +12,19 @@ class Movie {
     var title: String
     var releaseDate : String
     var overview : String
+    var id : String
     var posterURL : URL!
     var backdropURL : URL!
     
     let baseURL = "https://image.tmdb.org/t/p/w500"
     let baseBackdropURLString = "https://image.tmdb.org/t/p/original"
     
+
     init(dictionary: [String: Any]) {
         title = dictionary["title"] as? String ?? "No title"
         releaseDate = dictionary["release_date"] as? String ?? "No release date"
         overview = dictionary["overview"] as? String ?? "No overview"
+        id = dictionary["id"] as? String ?? "No ID"
         
         let posterURLString = dictionary["poster_path"] as! String
         posterURL = URL(string: baseURL + posterURLString)!
